@@ -33,15 +33,15 @@ class _BottomNavState extends State<BottomNav> {
         },
         type: BottomNavigationBarType.fixed,
         items: [
-          _bottomItem('首页', Icons.home, 0),
-          _bottomItem('替身', Icons.people, 1),
-          _bottomItem('我的', Icons.account_circle, 2),
+          _bottomItem('首页', Icons.home),
+          _bottomItem('替身', Icons.people),
+          _bottomItem('我的', Icons.account_circle),
         ],
       ),
     );
   }
 
-  _bottomItem(String title, IconData icon, int index) {
+  _bottomItem(String title, IconData icon) {
     return BottomNavigationBarItem(
       icon: Icon(icon, color: _defaultColor),
       activeIcon: Icon(icon, color: _activeColor),
