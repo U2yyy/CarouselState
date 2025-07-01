@@ -12,8 +12,12 @@ class Stander extends StatefulWidget {
 class _StanderState extends State<Stander> {
   Timer? _timer;
   int _currentPage = 1000;
+  double currentPage = 1000.0;
   List<Widget> children = [];
-  final PageController _pageController = PageController(initialPage: 1000);
+  final PageController _pageController = PageController(
+    viewportFraction: 0.25,
+    initialPage: 1000,
+  );
   final List<String> imagePaths = [
     'assets/images/jojo1.jpg',
     'assets/images/jojo2.jpg',
@@ -34,6 +38,11 @@ class _StanderState extends State<Stander> {
     //     curve: Curves.easeInOut,
     //   );
     // });
+    _pageController.addListener(() {
+      setState(() {
+        currentPage = _pageController.page ?? currentPage;
+      });
+    });
     startAutoScroll();
   }
 
@@ -81,14 +90,23 @@ class _StanderState extends State<Stander> {
               _currentPage = index;
             },
             itemBuilder: (context, index) {
+              double scale = 1.0;
+              if (index >= currentPage - 1 && index <= currentPage + 1) {
+                scale = scale - (index - currentPage).abs() * 0.3;
+              } else {
+                scale = 0.5;
+              }
               String path = imagePaths[index % imagePaths.length];
               return Align(
                 alignment: Alignment.topCenter,
-                child: ClipOval(
-                  child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: Image.asset(path, fit: BoxFit.cover),
+                child: Transform.scale(
+                  scale: scale,
+                  child: ClipOval(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset(path, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               );
