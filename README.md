@@ -18,7 +18,7 @@ A new Flutter project.
     1. 由于设置的viewportFraction实际上是每个PageView占页面的比例，而scale设置的是每个PageView的缩放比例，那么两张图片之间就会有很宽的间距，这似乎是不换实现方式没办法解决的（未解决）
     2. 如果想要实现层叠方式，使用PageView同样不能实现，因为其并没有z轴
     
- 4. 
+ 4. 图片有抽搐现象
 
 This project is a starting point for a Flutter application.
 
