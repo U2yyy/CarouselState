@@ -26,6 +26,19 @@ class _StanderState extends State<Stander> {
   @override
   void initState() {
     super.initState();
+    // _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    //   _currentPage++;
+    //   _pageController.animateToPage(
+    //     _currentPage,
+    //     duration: Duration(milliseconds: 300),
+    //     curve: Curves.easeInOut,
+    //   );
+    // });
+    startAutoScroll();
+  }
+
+  void startAutoScroll() {
+    _timer?.cancel();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       _currentPage++;
       _pageController.animateToPage(
@@ -34,6 +47,10 @@ class _StanderState extends State<Stander> {
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  void stopAutoScroll() {
+    _timer?.cancel();
   }
 
   @override
@@ -47,26 +64,36 @@ class _StanderState extends State<Stander> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('无限轮播图demo')),
-      body: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: 300),
-        child: PageView.builder(
-          controller: _pageController,
-          onPageChanged: (index) {
-            _currentPage = index;
-          },
-          itemBuilder: (context, index) {
-            String path = imagePaths[index % imagePaths.length];
-            return Align(
-              alignment: Alignment.topCenter,
-              child: ClipOval(
-                child: SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: Image.asset(path, fit: BoxFit.cover),
+      body: NotificationListener(
+        onNotification: (notification) {
+          if (notification is ScrollStartNotification) {
+            stopAutoScroll();
+          } else if (notification is ScrollEndNotification) {
+            startAutoScroll();
+          }
+          return true;
+        },
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 300),
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              _currentPage = index;
+            },
+            itemBuilder: (context, index) {
+              String path = imagePaths[index % imagePaths.length];
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ClipOval(
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Image.asset(path, fit: BoxFit.cover),
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
