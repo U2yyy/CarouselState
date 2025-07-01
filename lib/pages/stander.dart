@@ -11,9 +11,9 @@ class Stander extends StatefulWidget {
 
 class _StanderState extends State<Stander> {
   Timer? _timer;
-  int _currentPage = 0;
+  int _currentPage = 1000;
   List<Widget> children = [];
-  final PageController _pageController = PageController();
+  final PageController _pageController = PageController(initialPage: 1000);
   final List<String> imagePaths = [
     'assets/images/jojo1.jpg',
     'assets/images/jojo2.jpg',
