@@ -1,6 +1,6 @@
 import 'package:demo1/pages/home_page.dart';
 import 'package:demo1/pages/my_file.dart';
-import 'package:demo1/pages/stander.dart';
+import 'package:demo1/pages/new_stander.dart';
 import 'package:flutter/material.dart';
 
 class BottomNav extends StatefulWidget {
@@ -19,7 +19,7 @@ class _BottomNavState extends State<BottomNav> {
     return Scaffold(
       body: PageView(
         controller: _controller,
-        children: [HomePage(), Stander(), MyFile()],
+        children: [HomePage(), NewStander(), MyFile()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[

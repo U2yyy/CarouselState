@@ -92,7 +92,7 @@ class _StanderState extends State<Stander> {
             itemBuilder: (context, index) {
               double scale = 1.0;
               if (index >= currentPage - 1 && index <= currentPage + 1) {
-                scale = scale - (index - currentPage).abs() * 0.3;
+                scale = 1 - (index - currentPage).abs() * 0.3;
               } else {
                 scale = 0.5;
               }
