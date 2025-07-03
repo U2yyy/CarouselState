@@ -15,8 +15,12 @@ A new Flutter project.
    解决办法：使用NotificationListener,即通知监听，监听Pageview发生的scroll行为，在用户滑动时取消计时器，停止滑动时再启动计时器即可。
 
  3. 如果继续使用ViewPage需要面临的问题：
-    1. 由于设置的viewportFraction实际上是每个PageView占页面的比例，而scale设置的是每个PageView的缩放比例，那么两张图片之间就会有很宽的间距，这似乎是不换实现方式没办法解决的（未解决）
+    1. 由于设置的viewportFraction实际上是每个PageView占页面的比例，而scale设置的是每个PageView的缩放比例，那么两张图片之间就会有很宽的间距，这似乎是不换实现方式没办法解决的
+   
+       
     2. 如果想要实现层叠方式，使用PageView同样不能实现，因为其并没有z轴
+   
+   解决办法：1和2都通过一个解决办法实现了：换方法，直接从二次利用PageView改为自己写Stack实现叠加效果，不过动画效果不太好做。
     
  4. 图片有抽搐现象
 
