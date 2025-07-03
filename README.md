@@ -24,7 +24,7 @@ A new Flutter project.
 
 Flutter 根据新的 Widget 树，重新渲染界面，实现视图刷新。
     
- 4. 图片有抽搐现象
+ 4. 动画效果不好实现，因为我每次重新调用buildImages()都改变了图片顺序
 
 This project is a starting point for a Flutter application.
 
