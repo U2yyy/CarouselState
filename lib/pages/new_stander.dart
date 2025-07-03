@@ -73,6 +73,8 @@ class _NewStanderState extends State<NewStander> {
     final imageHeight = 150.0;
     for (int i = 0; i < imagePaths.length; i++) {
       int diff = i - _currentIndex;
+      if (diff > imagePaths.length / 2) diff -= imagePaths.length;
+      if (diff < -imagePaths.length / 2) diff += imagePaths.length;
       if (diff == 0) {
         scale = 1.0;
         leftOffset = center - imageWidth / 2;
