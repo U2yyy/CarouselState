@@ -25,8 +25,12 @@ A new Flutter project.
 Flutter 根据新的 Widget 树，重新渲染界面，实现视图刷新。
     
  4. 动画效果不好实现，因为我每次重新调用buildImages()都改变了图片顺序
+给每个图片Widget绑定key，让flutter能识别出这是同一个Widget，只改变大小和位置，而不重新渲染整个列表即可。
+   
 
  5. 拖动页面时下面的bottomNav Icon颜色不改变
+这是因为没监听PageView，加一个onPageChanged监听其索引值变化即可。
+    
 
 This project is a starting point for a Flutter application.
 
