@@ -2,25 +2,37 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class NewStander extends StatefulWidget {
-  const NewStander({super.key});
+class NewStand extends StatefulWidget {
+  const NewStand({super.key});
 
   @override
-  State<NewStander> createState() => _NewStanderState();
+  State<NewStand> createState() => _NewStandState();
 }
 
-class _NewStanderState extends State<NewStander> {
+class _NewStandState extends State<NewStand> {
   Timer? _timer;
   int _currentIndex = 0;
   double dragStart = 0.0;
   double dragDis = 0.0;
-  final List<String> imagePaths = [
-    'assets/images/jojo1.jpg',
+  double _opacity = 0.0;
+  final List<String> standMasterImagePaths = [
     'assets/images/jojo2.jpg',
     'assets/images/jojo3.jpg',
     'assets/images/dio.jpg',
-    'assets/images/caesar.jpg',
-    'assets/images/kars.jpg',
+    'assets/images/Avdol.jpg',
+    'assets/images/bobo.jpg',
+    'assets/images/Noriaki.jpg',
+    'assets/images/Yoshikage.jpg',
+  ];
+
+  final List<String> standImagePaths = [
+    'assets/images/jojo2_stand.jpg',
+    'assets/images/jojo3_stand.jpg',
+    'assets/images/dio_stand.jpg',
+    'assets/images/Avdol_stand.jpg',
+    'assets/images/bobo_stand.jpg',
+    'assets/images/Noriaki_stand.jpg',
+    'assets/images/Yoshikage_stand.jpg',
   ];
 
   @override
@@ -28,6 +40,7 @@ class _NewStanderState extends State<NewStander> {
     // TODO: implement initState
     super.initState();
     startAutoScroll();
+    _opacity = 1.0;
   }
 
   void startAutoScroll() {
@@ -44,14 +57,29 @@ class _NewStanderState extends State<NewStander> {
 
   void nextImage() {
     setState(() {
-      _currentIndex = (_currentIndex + 1) % imagePaths.length;
+      _opacity = 0.0;
+    });
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _currentIndex = (_currentIndex + 1) % standMasterImagePaths.length;
+        _opacity = 1.0;
+      });
     });
   }
 
   void previousImage() {
     setState(() {
-      _currentIndex =
-          (_currentIndex - 1 + imagePaths.length) % imagePaths.length;
+      _opacity = 0.0;
+    });
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _currentIndex =
+            (_currentIndex - 1 + standMasterImagePaths.length) %
+            standMasterImagePaths.length;
+        _opacity = 1.0;
+      });
     });
   }
 
@@ -61,7 +89,7 @@ class _NewStanderState extends State<NewStander> {
     super.dispose();
   }
 
-  List<Widget> buildImage(BuildContext context) {
+  List<Widget> buildCarouselImage(BuildContext context) {
     List<Widget> _stackImages = [];
     Widget? currentImage;
     List<Widget> outerImages = [];
@@ -72,11 +100,15 @@ class _NewStanderState extends State<NewStander> {
     final center = screenWidth / 2;
     final imageWidth = 150.0;
     final imageHeight = 150.0;
-    for (int i = 0; i < imagePaths.length; i++) {
+    for (int i = 0; i < standMasterImagePaths.length; i++) {
       int diff = i - _currentIndex;
       //diff > length / 2 时，反方向更近，减去符合物理逻辑上的关系
-      if (diff > imagePaths.length / 2) diff -= imagePaths.length;
-      if (diff < -imagePaths.length / 2) diff += imagePaths.length;
+      if (diff > standMasterImagePaths.length / 2) {
+        diff -= standMasterImagePaths.length;
+      }
+      if (diff < -standMasterImagePaths.length / 2) {
+        diff += standMasterImagePaths.length;
+      }
       //最上面的图片最后加，我们先保留
       if (diff == 0) {
         scale = 1.0;
@@ -100,7 +132,10 @@ class _NewStanderState extends State<NewStander> {
                   color: Colors.grey,
                   width: imageWidth,
                   height: imageHeight,
-                  child: Image.asset(imagePaths[i], fit: BoxFit.cover),
+                  child: Image.asset(
+                    standMasterImagePaths[i],
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -134,7 +169,10 @@ class _NewStanderState extends State<NewStander> {
                     color: Colors.grey,
                     width: imageWidth,
                     height: imageHeight,
-                    child: Image.asset(imagePaths[i], fit: BoxFit.cover),
+                    child: Image.asset(
+                      standMasterImagePaths[i],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -169,7 +207,10 @@ class _NewStanderState extends State<NewStander> {
                     color: Colors.grey,
                     width: imageWidth,
                     height: imageHeight,
-                    child: Image.asset(imagePaths[i], fit: BoxFit.cover),
+                    child: Image.asset(
+                      standMasterImagePaths[i],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -191,31 +232,47 @@ class _NewStanderState extends State<NewStander> {
     return _stackImages;
   }
 
+  Widget buildBottomImage(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _opacity,
+      duration: Duration(milliseconds: 300),
+      child: Image.asset(standImagePaths[_currentIndex], fit: BoxFit.cover),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('轮播图主体')),
-      body: GestureDetector(
-        onHorizontalDragStart: (DragStartDetails details) {
-          stopAutoScroll();
-          dragStart = details.localPosition.dx;
-        },
-        onHorizontalDragUpdate: (DragUpdateDetails details) {
-          double curLocation = details.localPosition.dx;
-          dragDis = curLocation - dragStart;
-        },
-        onHorizontalDragEnd: (DragEndDetails details) {
-          //向左滑时dragDis < 0 因此是向下一张图片滑动 这里很容易想当然搞错
-          if (dragDis > 50) {
-            previousImage();
-          } else if (dragDis < -50) {
-            nextImage();
-          }
-          dragDis = 0.0;
-          startAutoScroll();
-        },
-        //每次_currentIndex改变时都会调用setState()重新渲染
-        child: Stack(children: buildImage(context)),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onHorizontalDragStart: (DragStartDetails details) {
+                stopAutoScroll();
+                dragStart = details.localPosition.dx;
+              },
+              onHorizontalDragUpdate: (DragUpdateDetails details) {
+                double curLocation = details.localPosition.dx;
+                dragDis = curLocation - dragStart;
+              },
+              onHorizontalDragEnd: (DragEndDetails details) {
+                //向左滑时dragDis < 0 因此是向下一张图片滑动 这里很容易想当然搞错
+                if (dragDis > 50) {
+                  previousImage();
+                } else if (dragDis < -50) {
+                  nextImage();
+                }
+                dragDis = 0.0;
+                startAutoScroll();
+              },
+              //每次_currentIndex改变时都会调用setState()重新渲染
+              child: Stack(children: buildCarouselImage(context)),
+            ),
+          ),
+          Expanded(flex: 3, child: Center(child: buildBottomImage(context))),
+        ],
       ),
     );
   }

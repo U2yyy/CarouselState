@@ -1,6 +1,6 @@
 import 'package:demo1/pages/home_page.dart';
 import 'package:demo1/pages/my_file.dart';
-import 'package:demo1/pages/new_stander.dart';
+import 'package:demo1/pages/new_stand.dart';
 import 'package:flutter/material.dart';
 
 class BottomNav extends StatefulWidget {
@@ -24,7 +24,7 @@ class _BottomNavState extends State<BottomNav> {
             _currentIndex = index;
           });
         },
-        children: [HomePage(), NewStander(), MyFile()],
+        children: [HomePage(), NewStand(), MyFile()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
