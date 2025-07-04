@@ -19,6 +19,11 @@ class _BottomNavState extends State<BottomNav> {
     return Scaffold(
       body: PageView(
         controller: _controller,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         children: [HomePage(), NewStander(), MyFile()],
       ),
       bottomNavigationBar: BottomNavigationBar(

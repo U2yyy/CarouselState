@@ -32,6 +32,7 @@ class _NewStanderState extends State<NewStander> {
 
   void startAutoScroll() {
     _timer?.cancel();
+    //定时轮播
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       nextImage();
     });
@@ -73,12 +74,16 @@ class _NewStanderState extends State<NewStander> {
     final imageHeight = 150.0;
     for (int i = 0; i < imagePaths.length; i++) {
       int diff = i - _currentIndex;
+      //diff > length / 2 时，反方向更近，减去符合物理逻辑上的关系
       if (diff > imagePaths.length / 2) diff -= imagePaths.length;
       if (diff < -imagePaths.length / 2) diff += imagePaths.length;
+      //最上面的图片最后加，我们先保留
       if (diff == 0) {
         scale = 1.0;
         leftOffset = center - imageWidth / 2;
-        currentImage = Positioned(
+        currentImage = AnimatedPositioned(
+          duration: Duration(milliseconds: 300),
+          key: ValueKey('image$i'),
           top: 100,
           left: leftOffset,
           child: AnimatedScale(
@@ -102,6 +107,7 @@ class _NewStanderState extends State<NewStander> {
           ),
         );
       } else if (diff.abs() == 2) {
+        //最外围的图片有两张，先找到，然后存到Widget列表里面
         scale = 0.6;
         if (diff == 2) {
           leftOffset = center - imageWidth / 2 + imageWidth * diff.abs() * 0.6;
@@ -109,7 +115,9 @@ class _NewStanderState extends State<NewStander> {
           leftOffset = center - imageWidth / 2 - imageWidth * diff.abs() * 0.6;
         }
         outerImages.add(
-          Positioned(
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
+            key: ValueKey('image$i'),
             top: 100,
             left: leftOffset,
             child: AnimatedScale(
@@ -134,6 +142,7 @@ class _NewStanderState extends State<NewStander> {
           ),
         );
       } else if (diff.abs() == 1) {
+        //靠近最上面图片的有两张，找到后先存在Widget列表里面
         scale = 0.8;
         if (diff == 1) {
           leftOffset = center - imageWidth / 2 + imageWidth * diff.abs() * 0.6;
@@ -141,7 +150,9 @@ class _NewStanderState extends State<NewStander> {
           leftOffset = center - imageWidth / 2 - imageWidth * diff.abs() * 0.6;
         }
         innerImages.add(
-          Positioned(
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
+            key: ValueKey('image$i'),
             top: 100,
             left: leftOffset,
             child: AnimatedScale(
@@ -167,6 +178,7 @@ class _NewStanderState extends State<NewStander> {
         );
       }
     }
+    //先加最外层，再加靠内层，最后加最上层的图片，顺序很重要
     for (int i = 0; i < outerImages.length; i++) {
       _stackImages.add(outerImages[i]);
     }
@@ -202,6 +214,7 @@ class _NewStanderState extends State<NewStander> {
           dragDis = 0.0;
           startAutoScroll();
         },
+        //每次_currentIndex改变时都会调用setState()重新渲染
         child: Stack(children: buildImage(context)),
       ),
     );
