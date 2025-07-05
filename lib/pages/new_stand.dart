@@ -243,9 +243,10 @@ class _NewStandState extends State<NewStand> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('轮播图主体')),
       body: Column(
         children: [
+          Container(height: 60),
+          Expanded(flex: 1, child: Image.asset('assets/images/jojoAppbar.jpg')),
           Expanded(
             flex: 2,
             child: GestureDetector(
